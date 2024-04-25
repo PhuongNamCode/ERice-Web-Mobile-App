@@ -1,8 +1,8 @@
-"""empty message
+"""SmartRiceBox
 
-Revision ID: 7e628d5b66cb
+Revision ID: 21a477f01776
 Revises: 
-Create Date: 2023-09-25 15:27:25.539851
+Create Date: 2024-04-25 20:05:20.317479
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '7e628d5b66cb'
+revision: str = '21a477f01776'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
