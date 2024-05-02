@@ -11,7 +11,8 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const CustomSidebarMenu = (props) => {
   return (
@@ -19,11 +20,11 @@ const CustomSidebarMenu = (props) => {
       <View style={stylesSidebar.profileHeader}>
         <View style={stylesSidebar.profileHeaderPicCircle}>
           <Text style={{fontSize: 25, color: '#307ecc'}}>
-            {'Son Nguyen'.charAt(0)}
+            {'Smart Rice Box'.charAt(0)}
           </Text>
         </View>
         <Text style={stylesSidebar.profileHeaderText}>
-          Son Nguyen
+          Smart Rice Box
         </Text>
       </View>
       <View style={stylesSidebar.profileHeaderLine} />

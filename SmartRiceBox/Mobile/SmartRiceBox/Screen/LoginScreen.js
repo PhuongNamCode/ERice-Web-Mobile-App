@@ -15,11 +15,11 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Loader from './Components/Loader';
 import { API_URL } from '@env'
-import { registerIndieID } from 'native-notify';
+// import { registerIndieID } from 'native-notify';
 
 const LoginScreen = ({ navigation }) => {
   const [phoneNum, setPhoneNum] = useState('');
@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
       if (response.status === 200) {
         AsyncStorage.setItem('token', responseJson.access_token);
         console.log(responseJson.access_token)
-        registerIndieID(phoneNum, 12544, 'E7ZuZRkeUzZrSmf6B2Gjrd');
+        // registerIndieID(phoneNum, 12544, 'E7ZuZRkeUzZrSmf6B2Gjrd');
         navigation.replace('DrawerNavigationRoutes')
       }
       else {

@@ -4,7 +4,7 @@
 // Import React and Component
 import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, StyleSheet, StatusBar, Image, Modal, Alert, Button } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '@env'
 import Loader from '../Components/Loader';
 import { useIsFocused } from '@react-navigation/native';
@@ -51,7 +51,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
 const HomeScreen = (props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [riceBoxs, setRiceBoxs] = useState(null)
 
   const getRiceBoxApi = async () => {
