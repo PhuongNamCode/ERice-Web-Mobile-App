@@ -248,21 +248,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   addButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: '#0f68a0',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   addButtonLabel: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   setupText: {
     fontSize: 24, // Tăng kích thước chữ
     fontWeight: "bold",
     marginBottom: 40, // Tăng khoảng cách với các phần tử khác
-    color: "#007bff", // Màu sắc tùy chỉnh
+    color: "#0f68a0", // Màu sắc tùy chỉnh
     letterSpacing: 1, // Tăng khoảng cách giữa các ký tự
     textAlign: "center", // Canh giữa văn bản
     marginTop: -50, // Dịch vị trí lên trên

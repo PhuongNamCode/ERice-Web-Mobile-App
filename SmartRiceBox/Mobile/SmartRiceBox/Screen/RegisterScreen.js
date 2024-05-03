@@ -96,13 +96,13 @@ const RegisterScreen = (props) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#307ecc',
+          backgroundColor: 'white',
           justifyContent: 'center',
         }}>
         <Image
-          source={require('../Image/viettel.png')}
+          source={require('../Image/logoBK.png')}
           style={{
-            height: 150,
+            height: 200,
             resizeMode: 'contain',
             alignSelf: 'center'
           }}
@@ -120,7 +120,7 @@ const RegisterScreen = (props) => {
     );
   }
   return (
-    <View style={{ flex: 1, backgroundColor: '#307ecc' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -130,12 +130,13 @@ const RegisterScreen = (props) => {
         }}>
         <View style={{ alignItems: 'center' }}>
           <Image
-            source={require('../Image/viettel.png')}
+            source={require('../Image/logoBK.png')}
             style={{
-              width: '50%',
-              height: 100,
+              width:  160,
+              height: 160,
               resizeMode: 'contain',
-              margin: 30,
+              marginBottom: 30,
+              marginTop:40,
             }}
           />
         </View>
@@ -193,23 +194,6 @@ const RegisterScreen = (props) => {
               blurOnSubmit={false}
             />
           </View>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Adress"
-              placeholderTextColor="#8b9cb5"
-              //   ref={ageInputRef}
-              returnKeyType="next"
-              secureTextEntry={true}
-
-              //   onSubmitEditing={() =>
-              //     addressInputRef.current &&
-              //     addressInputRef.current.focus()
-              //   }
-              blurOnSubmit={false}
-            />
-          </View>
           {errortext != '' ? (
             <Text style={styles.errorTextStyle}>
               {errortext}
@@ -238,7 +222,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
-    backgroundColor: '#7DE24E',
+    backgroundColor: '#0f68a0',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',
@@ -247,17 +231,19 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 20,
+    marginTop: 50,
     marginBottom: 20,
   },
   buttonTextStyle: {
-    color: '#FFFFFF',
     paddingVertical: 10,
     fontSize: 16,
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   inputStyle: {
     flex: 1,
-    color: 'white',
+    color: 'black',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
@@ -270,9 +256,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   successTextStyle: {
-    color: 'white',
+    color: 'black', // Adjust as desired
     textAlign: 'center',
     fontSize: 18,
-    padding: 30,
+    padding: 40,
+    fontWeight: 'bold',
   },
 });

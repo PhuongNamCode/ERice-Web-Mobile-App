@@ -28,20 +28,20 @@ const DATA = [
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor }]}>
     <View style={{ flex: 1, justifyContent: "center" }}>
-      <Text style={[styles.title, { color: textColor, fontSize:25 }]}>{item.name}</Text>
+      <Text style={[styles.title, { color: textColor, fontSize:20, margin:5 }]}>{item.name}</Text>
       <Text style={[styles.title, { color: textColor }]}>{`${item.house_num_street}, ${item.ward}, ${item.district}, ${item.city}`}</Text>
     </View>
     <View style={{ flex: 1 / 2, flexDirection: "col" }}>
       <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
         <Image source={require("../../Image/humidity.png")} style={{ width: 25, height: 25, backgroundColor: "transparent", marginLeft: 5 }} />
-        <Text>{item.current_humidity} %</Text>
+        <Text>{item.current_humidity}%</Text>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-        <Image source={require("../../Image/temperature.png")} style={{ width: 30, height: 25, backgroundColor: "transparent" }} />
-        <Text>{item.current_temperature} °C</Text>
+        <Image source={require("../../Image/temperature.png")} style={{ width: 25, height: 25, backgroundColor: "transparent",marginLeft: 5 }} />
+        <Text>{item.current_temperature}°C</Text>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-        <Image source={require("../../Image/ricebox.png")} style={{ width: 30, height: 30, backgroundColor: "transparent" }} />
+        <Image source={require("../../Image/ricebox.png")} style={{ width: 25, height: 25, backgroundColor: "transparent" }} />
         <Text>{item.current_rice_amount}%</Text>
       </View>
     </View>
@@ -94,7 +94,7 @@ const HomeScreen = (props) => {
 
 
   const renderItem = (item) => {
-    const backgroundColor = '#3399ff'
+    const backgroundColor = '#E6E6E6';
     const color = 'black';
 
     return (
@@ -153,7 +153,7 @@ const HomeScreen = (props) => {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity onPress={() => { setModalVisible(true) }} style={{ alignItems: "center", justifyContent: "center", padding: 10 }}>
+      <TouchableOpacity onPress={() => { setModalVisible(true) }} style={{ alignItems: "center", justifyContent: "center", padding: 10, margin:20 }}>
         <Image source={require("../../Image/plus.png")} style={{ width: 100, height: 100 }} />
       </TouchableOpacity>
       <ScrollView
@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
+    margin:5,
   },
   centeredView: {
     flex: 1,

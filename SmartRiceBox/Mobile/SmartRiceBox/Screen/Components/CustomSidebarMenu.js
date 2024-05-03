@@ -1,26 +1,43 @@
-// Example of Splash, Login and Sign Up in React Native
-// https://aboutreact.com/react-native-login-and-signup/
-
-// Import React and Component
 import React from 'react';
-import {View, Text, Alert, StyleSheet} from 'react-native';
-
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
-
+import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const CustomSidebarMenu = (props) => {
+  const handleLogout = () => {
+    props.navigation.toggleDrawer();
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            return null;
+          },
+        },
+        {
+          text: 'Confirm',
+          onPress: async () => {
+            AsyncStorage.clear();
+            props.navigation.replace('Auth');
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  const handleUserGuide = () => {
+    // Implement user guide functionality here
+  };
+
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
         <View style={stylesSidebar.profileHeaderPicCircle}>
-          <Text style={{fontSize: 25, color: '#307ecc'}}>
-            {'Smart Rice Box'.charAt(0)}
+          <Text style={{ fontSize: 25, color: '#307ecc' }}>
+            {'SRB'.charAt(0)}
           </Text>
         </View>
         <Text style={stylesSidebar.profileHeaderText}>
@@ -28,40 +45,22 @@ const CustomSidebarMenu = (props) => {
         </Text>
       </View>
       <View style={stylesSidebar.profileHeaderLine} />
-
+      <TouchableOpacity onPress={handleUserGuide} style={stylesSidebar.button}>
+        <Text style={stylesSidebar.buttonText}>User Guide</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleLogout} style={stylesSidebar.button}>
+        <Text style={stylesSidebar.buttonText}>Logout</Text>
+      </TouchableOpacity>
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
-        <DrawerItem
-          label={({color}) => 
-            <Text style={{color: '#d8d8d8'}}>
-              Logout
-            </Text>
-          }
-          onPress={() => {
-            props.navigation.toggleDrawer();
-            Alert.alert(
-              'Logout',
-              'Are you sure? You want to logout?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => {
-                    return null;
-                  },
-                },
-                {
-                  text: 'Confirm',
-                  onPress: () => {
-                    AsyncStorage.clear();
-                    props.navigation.replace('Auth');
-                  },
-                },
-              ],
-              {cancelable: false},
-            );
-          }}
-        />
       </DrawerContentScrollView>
+      <View style={stylesSidebar.logoContainer}>
+        <Image source={require("../../Image/logoBK.png")} style={stylesSidebar.logo}></Image>
+      </View>
+      <View style={stylesSidebar.footer}>
+        <Text style={stylesSidebar.footerText}>Version 1.0.0</Text>
+        <Text style={stylesSidebar.footerText}>© 3DIoT</Text>
+      </View>
     </View>
   );
 };
@@ -70,38 +69,68 @@ export default CustomSidebarMenu;
 
 const stylesSidebar = StyleSheet.create({
   sideMenuContainer: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#307ecc',
+    flex: 1,
+    backgroundColor: 'white',
     paddingTop: 40,
-    color: 'white',
+    color: '#307ecc',
   },
   profileHeader: {
     flexDirection: 'row',
     backgroundColor: '#307ecc',
-    padding: 15,
-    textAlign: 'center',
+    padding: 20,
+    alignItems: 'center',
   },
   profileHeaderPicCircle: {
     width: 60,
     height: 60,
-    borderRadius: 60 / 2,
-    color: 'white',
+    borderRadius: 30,
     backgroundColor: '#ffffff',
-    textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
   },
   profileHeaderText: {
     color: 'white',
-    alignSelf: 'center',
-    paddingHorizontal: 10,
+    marginLeft: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   profileHeaderLine: {
-    height: 1,
+    height: 5,
     marginHorizontal: 20,
     backgroundColor: '#e2e2e2',
     marginTop: 15,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 8,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    padding: 15,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  footer: {
+    alignItems: 'center',
+    marginTop: 'auto',
+    marginBottom: 20,
+  },
+  footerText: {
+    color: '#757575',
+    fontSize: 14,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 150, // Điều chỉnh kích thước của ảnh
+    height: 75,  // Điều chỉnh kích thước của ảnh
+    resizeMode: 'contain', // Giữ tỷ lệ của ảnh khi thay đổi kích thước
   },
 });

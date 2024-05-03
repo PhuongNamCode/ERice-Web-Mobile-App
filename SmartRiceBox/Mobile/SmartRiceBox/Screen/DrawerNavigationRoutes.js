@@ -17,9 +17,9 @@ const HomeScreenStack = ({ navigation }) => {
       initialRouteName="HomeScreen"
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#3F51B5', // Background color for the header
+          backgroundColor: '#307ecc', // Background color for the header
         },
-        headerTintColor: '#FFFFFF', // Text color for the header
+        headerTintColor: 'white', // Text color for the header
         headerTitleStyle: {
           fontWeight: 'bold', // Font style for the header title
         },
@@ -35,7 +35,7 @@ const HomeScreenStack = ({ navigation }) => {
           headerStyle: {
             backgroundColor: '#307ecc', //Set Header color
           },
-          headerTintColor: '#fff', //Set Header text color
+          headerTintColor: 'white', //Set Header text color
           headerTitleStyle: {
             fontWeight: 'bold', //Set Header text style
           },
