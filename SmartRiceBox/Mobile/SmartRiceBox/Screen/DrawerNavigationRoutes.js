@@ -1,15 +1,8 @@
-// Example of Splash, Login and Sign Up in React Native
-// https://aboutreact.com/react-native-login-and-signup/
-
-// Import React
 import React from 'react';
 import { Text } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-// Import Navigators from React Navigation
-import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-
-// Import Screens
 import HomeScreen from './DrawerScreens/HomeScreen';
 import SettingsScreen from './DrawerScreens/SettingsScreen';
 import CustomSidebarMenu from './Components/CustomSidebarMenu';
@@ -18,16 +11,26 @@ import NavigationDrawerHeader from './Components/NavigationDrawerHeader';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const HomeScreenStack = ({navigation}) => {
+const HomeScreenStack = ({ navigation }) => {
   return (
-    <Stack.Navigator initialRouteName="HomeScreen">
+    <Stack.Navigator
+      initialRouteName="HomeScreen"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#3F51B5', // Background color for the header
+        },
+        headerTintColor: '#FFFFFF', // Text color for the header
+        headerTitleStyle: {
+          fontWeight: 'bold', // Font style for the header title
+        },
+      }}>
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          title: 'Home', //Set Header Title
+          title: 'Home',
           headerLeft: () => (
-            <NavigationDrawerHeader navigationProps={navigation} />
+            <NavigationDrawerHeader navigationProps={navigation} /> 
           ),
           headerStyle: {
             backgroundColor: '#307ecc', //Set Header color
@@ -36,7 +39,7 @@ const HomeScreenStack = ({navigation}) => {
           headerTitleStyle: {
             fontWeight: 'bold', //Set Header text style
           },
-        }}
+          }}
       />
     </Stack.Navigator>
   );
@@ -73,18 +76,17 @@ const DrawerNavigatorRoutes = (props) => {
   return (
     <Drawer.Navigator
       screenOptions={{
-        activeTintColor: 'white',
-        color: '#cee1f2',
-        itemStyle: {marginVertical: 5, color: 'white'},
-        labelStyle: {
-          color: '#d8d8d8',
+        drawerStyle: {
+          backgroundColor: 'white', // Background color for the drawer
         },
-        headerShown:false
+        drawerActiveTintColor: 'white', // Text color for the active item
+        drawerInactiveTintColor: 'white', // Text color for the inactive items
+        headerShown:false,
       }}
       drawerContent={CustomSidebarMenu}>
       <Drawer.Screen
-        name="homeScreenStack"
-        options={{drawerLabel: 'Home Screen'}}
+        name="Smart Rice Box"
+        options={{ drawerLabel: 'Home Screen' }}
         component={HomeScreenStack}
       />
     </Drawer.Navigator>
