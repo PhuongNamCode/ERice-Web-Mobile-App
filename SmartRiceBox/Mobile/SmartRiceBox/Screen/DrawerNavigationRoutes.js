@@ -5,6 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import HomeScreen from './DrawerScreens/HomeScreen';
 import SettingsScreen from './DrawerScreens/SettingsScreen';
+import ProductsScreen from './Components/Products'; // Import the ProductsScreen component
 import CustomSidebarMenu from './Components/CustomSidebarMenu';
 import NavigationDrawerHeader from './Components/NavigationDrawerHeader';
 
@@ -72,6 +73,33 @@ const SettingScreenStack = ({navigation}) => {
   );
 };
 
+const ProductsScreenStack = ({navigation}) => { // Define a new navigation stack for ProductsScreen
+  return (
+    <Stack.Navigator
+      initialRouteName="ProductsScreen"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerHeader navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#307ecc', //Set Header color
+        },
+        headerTintColor: 'blue', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="ProductsScreen"
+        component={ProductsScreen}
+        options={{
+          title: 'Products', //Set Header Title
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const DrawerNavigatorRoutes = (props) => {
   return (
     <Drawer.Navigator
@@ -88,6 +116,11 @@ const DrawerNavigatorRoutes = (props) => {
         name="Smart Rice Box"
         options={{ drawerLabel: 'Home Screen' }}
         component={HomeScreenStack}
+      />
+      <Drawer.Screen
+        name="Products" // Define the screen name for ProductsScreen
+        options={{ drawerLabel: 'Products' }} // Set the label for the drawer item
+        component={ProductsScreenStack} // Set the component for the screen
       />
     </Drawer.Navigator>
   );

@@ -19,6 +19,14 @@ const SetUpRiceBoxScreen = (props) => {
   const [longitude, setLongitude] = useState(null);
   const [latitude, setLatitude] = useState(null);
 
+  const [qrValue, setQrValue] = useState(""); // Thêm state để lưu trữ giá trị qr_value
+
+  useEffect(() => {
+    if (props.route.params && props.route.params.qr_value) {
+      setQrValue(props.route.params.qr_value);
+      setRiceBoxId(props.route.params.qr_value); // Gán giá trị qr_value cho riceBoxId
+    }
+  }, [props.route.params]);
 
   useEffect(() => {
     (async () => {

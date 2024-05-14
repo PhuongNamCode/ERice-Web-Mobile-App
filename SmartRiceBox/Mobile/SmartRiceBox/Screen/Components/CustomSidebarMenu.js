@@ -32,6 +32,11 @@ const CustomSidebarMenu = (props) => {
     // Implement user guide functionality here
   };
 
+  const handleProducts = () => {
+    props.navigation.toggleDrawer();
+    props.navigation.navigate('Products'); // Điều hướng đến màn hình Products.js
+  };
+
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
@@ -48,6 +53,11 @@ const CustomSidebarMenu = (props) => {
       <TouchableOpacity onPress={handleUserGuide} style={stylesSidebar.button}>
         <Text style={stylesSidebar.buttonText}>User Guide</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleProducts} style={stylesSidebar.button}>
+        <Text style={stylesSidebar.buttonText}>Products</Text>
+      </TouchableOpacity>
+    
       <TouchableOpacity onPress={handleLogout} style={stylesSidebar.button}>
         <Text style={stylesSidebar.buttonText}>Logout</Text>
       </TouchableOpacity>
