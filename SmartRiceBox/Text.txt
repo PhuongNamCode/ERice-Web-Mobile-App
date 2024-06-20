@@ -1,0 +1,14 @@
+sudo sysctl fs.inotify.max_user_watches=524288 
+ssh inter@115.78.92.253 -p 2226
+Mk labiot
+conda activate LVTN
+sudo docker-compose up -d
+python3 run.py
+sudo docker ps
+sudo docker exec -it aff217b44fa6 bash
+psql -U postgres
+\c smart_ricebox_db
+\dt
+DELETE FROM ricebox WHERE id=29;
+select * from ricebox;
+select * from users;

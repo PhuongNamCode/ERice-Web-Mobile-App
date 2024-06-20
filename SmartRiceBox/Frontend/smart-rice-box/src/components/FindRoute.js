@@ -9,23 +9,21 @@ import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Loading from "../components/Loading"
 import ReactMapboxGl, { Marker, Popup, Source, Layer } from 'react-mapbox-gl';
-import ContentMarker from './ContentMarker';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import WarehouseIcon from '@mui/icons-material/Warehouse';
-import { makeStyles } from '@mui/styles'
 
 export default function AlternateTimeline(props) {
 
-  var storage_lng = 106.694807
-  var storage_lat = 10.767282
+  var storage_lng = 106.694807;
+  var storage_lat = 10.767282;
 
-  const [data, setData] = React.useState(null)
-  const [loading, setLoading] = React.useState(true)
-  const [bound, setBound] = useState(null)
-  const [markers, setMarkers] = useState(null)
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [bound, setBound] = useState(null);
+  const [markers, setMarkers] = useState(null);
   const [activeMarker, setActiveMarker] = useState(null);
-  const [geojson, setGeojson] = useState(null)
+  const [outboundGeojson, setOutboundGeojson] = useState(null);
+  const [returnGeojson, setReturnGeojson] = useState(null);
 
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -34,63 +32,63 @@ export default function AlternateTimeline(props) {
     setActiveMarker(marker);
   };
 
-
   useEffect(() => {
     (async () => {
       var response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/find_route`
-      )
-      var responseJson = await response.json()
-      console.log("Path",responseJson)
-      let coords = [`${storage_lng},${storage_lat}`]
-      for (let e of responseJson){
-        coords.push(`${e.position.lng},${e.position.lat}`)
+      );
+      var responseJson = await response.json();
+      console.log("Path", responseJson);
+      let coords = [`${storage_lng},${storage_lat}`];
+      for (let e of responseJson) {
+        coords.push(`${e.position.lng},${e.position.lat}`);
       }
-      coords.push(`${storage_lng},${storage_lat}`)
-      coords = coords.join(";")
-      console.log("Coords", coords)
+      coords.push(`${storage_lng},${storage_lat}`);
+      coords = coords.join(";");
+      console.log("Coords", coords);
       var directRes = await fetch(
         `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${process.env.REACT_APP_MAP_BOX_API}`
-      )
-      var directResJson = await directRes.json()
-      console.log("JSON",directResJson["routes"][0]["geometry"]["coordinates"])
-      setGeojson({
+      );
+      var directResJson = await directRes.json();
+      console.log("JSON", directResJson["routes"][0]["geometry"]["coordinates"]);
+
+      const routeCoordinates = directResJson["routes"][0]["geometry"]["coordinates"];
+      const midpoint = Math.floor((routeCoordinates.length - 1) / 2);
+
+      setOutboundGeojson({
         'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': directResJson["routes"][0]["geometry"]["coordinates"]
-          }
-      })
-      setData(responseJson)
-      setMarkers(responseJson)
-    })()
-  }, [])
+        'properties': {},
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': routeCoordinates.slice(0, midpoint + 1)
+        }
+      });
+
+      setReturnGeojson({
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': routeCoordinates.slice(midpoint)
+        }
+      });
+
+      setData(responseJson);
+      setMarkers(responseJson);
+    })();
+  }, []);
 
   useEffect(() => {
-    if (markers && data && geojson) {
-      var tempBound = [[storage_lng, storage_lat]]
+    if (markers && data && outboundGeojson && returnGeojson) {
+      var tempBound = [[storage_lng, storage_lat]];
       for (var marker of markers) {
-        tempBound.push([parseFloat(marker.position.lng).toFixed(6), parseFloat(marker.position.lat).toFixed(6)])
+        tempBound.push([parseFloat(marker.position.lng).toFixed(6), parseFloat(marker.position.lat).toFixed(6)]);
       }
-      console.log(tempBound)
-      setBound(tempBound)
-      setLoading(false)
+      console.log(tempBound);
+      setBound(tempBound);
+      setLoading(false);
     }
-  }, [data, markers, geojson])
-
-  // const geojson = {
-  //   'type': 'Feature',
-  //   'properties': {},
-  //   'geometry': {
-  //     'type': 'LineString',
-  //     'coordinates': [
-  //       [106.694807, 10.767282],
-  //       [106.694807, 12.767282],
-  //     ]
-  //   }
-  // };
-  
+  }, [data, markers, outboundGeojson, returnGeojson]);
 
   return (loading ? <Loading loading={loading}></Loading> :
     <Stack>
@@ -109,10 +107,10 @@ export default function AlternateTimeline(props) {
         {
           data.map((e, index) => {
             return (
-              <TimelineItem>
+              <TimelineItem key={index}>
                 <TimelineSeparator>
                   <TimelineDot />
-                  <TimelineConnector/>
+                  <TimelineConnector />
                 </TimelineSeparator>
                 <TimelineContent>
                   <Stack>
@@ -121,7 +119,7 @@ export default function AlternateTimeline(props) {
                   </Stack>
                 </TimelineContent>
               </TimelineItem>
-            )
+            );
           })
         }
         <TimelineItem>
@@ -141,24 +139,21 @@ export default function AlternateTimeline(props) {
           height: '100vh',
           width: '100vw'
         }}
-        // fitBounds={bound.length > 0 ? bound : null}
-        center = {[106.69102, 10.782568]}
-        zoom = {[15]}
-        // fitBoundsOptions={{ padding: 400 }}
+        center={[106.69102, 10.782568]}
+        zoom={[15]}
       >
         <Marker
           coordinates={[storage_lng, storage_lat]}
           anchor="bottom"
         >
           <div style={{ fontSize: "40px", cursor: 'pointer' }}>
-
             <div style={{ fontSize: "40px", cursor: 'pointer', marginBottom: 20 }}>Kho</div>
             <div style={{ fontSize: "40px", cursor: 'pointer' }}>📍</div>
           </div>
         </Marker>
         {markers.map((marker, index) => {
           return (
-            <div>
+            <div key={index}>
               <Marker
                 coordinates={[marker.position.lng, marker.position.lat]}
                 anchor="bottom"
@@ -167,16 +162,14 @@ export default function AlternateTimeline(props) {
                   <div style={{ fontSize: "40px", cursor: 'pointer', marginBottom: 20 }}>{index + 1}</div>
                   <div style={{ fontSize: "40px", cursor: 'pointer' }}>📍</div>
                 </Stack>
-
               </Marker>
-
               {activeMarker === marker.id && <Popup
                 coordinates={[marker.position.lng, marker.position.lat]}
                 offset={{
                   'bottom': [0, -38]
                 }}
                 closeOnClick={true}
-                onClose={() => console.log("CLode")}
+                onClose={() => console.log("Close")}
               >
                 <div>
                   <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -184,26 +177,29 @@ export default function AlternateTimeline(props) {
                       <CloseIcon />
                     </IconButton>
                   </div>
-
-                  {/* <ContentMarker marker={marker}></ContentMarker> */}
                   <Typography>Địa chỉ: {marker.address}</Typography>
                   <Typography>Điện thoại: {marker.phone}</Typography>
                 </div>
               </Popup>}
-
             </div>
-          )
+          );
         })}
-
-        <Source id="route" geoJsonSource={{ type: 'geojson', data: geojson }} />
+        <Source id="route-outbound" geoJsonSource={{ type: 'geojson', data: outboundGeojson }} />
         <Layer
-          id="route"
+          id="route-outbound"
           type="line"
-          sourceId="route"
+          sourceId="route-outbound"
           layout={{ 'line-join': 'round', 'line-cap': 'round' }}
           paint={{ 'line-color': '#0000FF', 'line-width': 8 }}
         />
-
+        <Source id="route-return" geoJsonSource={{ type: 'geojson', data: returnGeojson }} />
+        <Layer
+          id="route-return"
+          type="line"
+          sourceId="route-return"
+          layout={{ 'line-join': 'round', 'line-cap': 'round' }}
+          paint={{ 'line-color': '#FF0000', 'line-width': 8 }}
+        />
       </props.Map>
     </Stack>
   );
