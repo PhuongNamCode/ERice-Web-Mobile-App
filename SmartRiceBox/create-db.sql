@@ -1,0 +1,1 @@
+CREATE DATABASE smart_ricebox_db;

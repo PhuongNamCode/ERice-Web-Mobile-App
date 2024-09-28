@@ -24,7 +24,14 @@ export default function MyMap(props) {
   useEffect(() => {
     (async () => {
         var response = await fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/get_marker`
+            `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/get_marker`,
+            {
+                method:"GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("access_token")
+                }
+            }
         )
         var responseJson = await response.json()
         // console.log(responseJson)

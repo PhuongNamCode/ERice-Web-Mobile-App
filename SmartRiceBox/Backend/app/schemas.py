@@ -10,7 +10,7 @@ class Token(BaseModel):
 
 class UserOut(BaseModel):
     id: int
-    phone_num: str
+    username: str
     created_at: datetime
 
     class Config:
@@ -18,14 +18,16 @@ class UserOut(BaseModel):
 
 
 class UserCreate(BaseModel):
-    phone_num: str
+    username: str
+    phone_num: Optional[str] = None
+    email: Optional[str] = None
     password: str
     repeat_password: str
     role: str
 
 
 class UserLogin(BaseModel):
-    phone_num: str
+    username: str
     password: str
 
 
@@ -57,6 +59,13 @@ class UpdateRiceBoxRes(BaseModel):
     longitude: float
     latitude: float
 
+class AddProviderRes(BaseModel):
+    name: str
+    provider_username: str
+
+class AddProviderReq(BaseModel):
+    rice_box_seri: str
+    provider_username: str
 
 class UpdateRiceBoxReq(BaseModel):
     rice_box_seri: str

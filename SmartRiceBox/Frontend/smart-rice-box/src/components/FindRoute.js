@@ -35,7 +35,14 @@ export default function AlternateTimeline(props) {
   useEffect(() => {
     (async () => {
       var response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/find_route`
+        `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/find_route`,
+        {
+          method:"GET",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + localStorage.getItem("access_token")
+          }
+      }
       );
       var responseJson = await response.json();
       console.log("Path", responseJson);

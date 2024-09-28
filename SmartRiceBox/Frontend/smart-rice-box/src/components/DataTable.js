@@ -22,6 +22,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Loading from "../components/Loading"
+import Modal from '@mui/material/Modal';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import Fab from '@mui/material/Fab';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 
 function createData(imei, calories, fat, carbs, protein, is_tick) {
@@ -222,10 +241,34 @@ export default function EnhancedTable() {
     const [rows, setRows] = React.useState(null)
     const [loading, setLoading] = React.useState(true)
 
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const [riceType, setRiceType] = React.useState("");
+    const [riceAmount, setRiceAmount] = React.useState(0);
+    const [imeiModal, setImeiModal] = React.useState("");
+
+    const [riceTypes, setRiceTypes] = React.useState([])
+
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const handleChange = (event) => {
+        setRiceType(event.target.value);
+    };
+
+
     React.useEffect(() => {
         const fetchAPI = async () => {
             var response = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/get_data_table`
+                `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/get_data_table`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("access_token")
+                    }
+                }
             )
             var responseJson = await response.json()
             var tempRow = []
@@ -238,6 +281,19 @@ export default function EnhancedTable() {
                 }
             }
             setRows(tempRow)
+
+            var response = await fetch(
+                `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/get_rice_type`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("access_token")
+                    }
+                }
+            )
+            var responseJson = await response.json()
+            setRiceTypes(responseJson)
         }
         fetchAPI()
     }, [])
@@ -280,21 +336,61 @@ export default function EnhancedTable() {
         setSelected([]);
     };
 
-    const handleClick = async (event, imei) => {
-        var response = await fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/tick_deliver?access_token=${imei}`,
-            {
-                method:"PUT"
-            }
-        )
-        var updateRows = []
-        for (let row of rows){
-            if (row.imei === imei){
+    const handleConfirm = async () => {
+        setIsLoading(true)
+        await fetch(
+                `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/tick_deliver?access_token=${imeiModal}&rice_type_id=${riceType}&quantity=${riceAmount}`,
+                {
+                    method: "PUT"
+                }
+            )
+        setIsLoading(false)
+        for (let row of rows) {
+            if (row.imei === imeiModal) {
                 row.is_tick = !row.is_tick
+            }
+        }
+        handleClose()
+    }
+
+    const handleClick = async (event, imei) => {
+        let is_ticked = false
+        var updateRows = []
+        for (let row of rows) {
+            if (row.imei === imei) {
+                row.is_tick = !row.is_tick
+                is_ticked = true
             }
             updateRows.push(row)
         }
         setRows(updateRows)
+        console.log(is_ticked)
+        if (is_ticked) {
+            await fetch(
+                    `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/tick_deliver?access_token=${imei}`,
+                    {
+                        method: "PUT"
+                    }
+                )
+        }
+        else{
+            setImeiModal(imei)
+            handleOpen()
+        }
+        // var response = await fetch(
+        //     `${process.env.REACT_APP_BACKEND_URL}/api/rice_box/tick_deliver?access_token=${imei}`,
+        //     {
+        //         method: "PUT"
+        //     }
+        // )
+        // var updateRows = []
+        // for (let row of rows) {
+        //     if (row.imei === imei) {
+        //         row.is_tick = !row.is_tick
+        //     }
+        //     updateRows.push(row)
+        // }
+        // setRows(updateRows)
     };
 
     const handleChangePage = (event, newPage) => {
@@ -396,6 +492,33 @@ export default function EnhancedTable() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <FormControl fullWidth>
+                        <InputLabel id="rice-type">Rice Type</InputLabel>
+                        <Select
+                            labelId="rice-type"
+                            id="rice-type-select"
+                            value={riceType}
+                            label="Rice Type"
+                            onChange={handleChange}
+                        >
+                            {riceTypes.map((riceType) => (
+                                <MenuItem key={riceType} value={riceType.id}>{riceType.name}</MenuItem>
+                            ))}
+                        </Select>
+                        <TextField sx={{ mt: 2 }} id="outlined-basic" label="Amount of rice (kg)" variant="outlined" value={riceAmount} onChange={(event) => setRiceAmount(event.target.value)} />
+                        <Fab variant="extended" color="primary" sx={{ mt: 2 }} onClick={handleConfirm}>
+                            Confirm
+                        </Fab>
+                    </FormControl>
+                </Box>
+            </Modal>
         </Box>
     );
 }

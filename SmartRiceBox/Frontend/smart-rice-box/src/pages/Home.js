@@ -18,13 +18,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import MapIcon from '@mui/icons-material/Map';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import DataTable from "../components/DataTable";
 import RouteIcon from '@mui/icons-material/Route';
 import FindRoute from "../components/FindRoute"
+import Visualization from "../components/Visualization"
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 
@@ -121,6 +121,9 @@ export default function Home(props) {
     else if (tab === "route"){
       return <FindRoute Map={props.Map}></FindRoute>
     }
+    else if (tab === "visualization"){
+      return <Visualization></Visualization>
+    }
   }
 
     // return (
@@ -214,6 +217,26 @@ export default function Home(props) {
                       <RouteIcon />
                     </ListItemIcon>
                     <ListItemText primary="Lộ trình" sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem key="route" disablePadding sx={{ display: 'block' }} onClick={()=>setTab("visualization")}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <BarChartIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Visualization" sx={{ opacity: open ? 1 : 0 }} />
                   </ListItemButton>
                 </ListItem>
             </List>
